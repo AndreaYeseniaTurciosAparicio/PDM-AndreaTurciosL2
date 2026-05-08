@@ -23,13 +23,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-@Composable
-fun GyroscopeSensor(onBack: () -> Unit) {
+
+
+
 @Composable
 fun useSensor(sensorType: Int): List<Float> {
     val context = LocalContext.current
     val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
-    val sensor = sensorManager.getDefaultSensor(sensorType) ?: return emptyList()
+    val sensor = sensorManager.getDefaultSensor(sensorType) ?: return listOf(0f, 0f, 0f)
+
     var sensorValues by remember { mutableStateOf(listOf(0f, 0f, 0f)) }
 
     DisposableEffect(sensorType) {
@@ -39,7 +41,6 @@ fun useSensor(sensorType: Int): List<Float> {
                     sensorValues = it.toList()
                 }
             }
-
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
         }
 
@@ -54,29 +55,32 @@ fun useSensor(sensorType: Int): List<Float> {
 }
 
 @Composable
-fun GyroscopeSensor(onBack: () -> Boolean) {
+fun GyroscopeSensor(onBack: () -> Unit) {
+
     val gyroscopeValues = useSensor(Sensor.TYPE_GYROSCOPE)
 
     Scaffold { innerPadding ->
-        Column (
-
-            modifier = Modifier.fillMaxSize().padding(innerPadding),
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(
-                onClick =
-                    {
-                        onBack()
-                    }
-            ) {
+
+            Button(onClick = { onBack() }) {
                 Text("Volver")
             }
-        }
-            Text(text = "Giroscopio", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-            Text(text = "X:${gyroscopeValues[0]}", fontSize = 18.sp)
-            Text(text = "Y:${gyroscopeValues[1]}", fontSize = 18.sp)
-            Text(text = "Z:${gyroscopeValues[2]}", fontSize = 18.sp)
+
+            Text(
+                text = "Giroscopio",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(text = "X: ${gyroscopeValues[0]}", fontSize = 18.sp)
+            Text(text = "Y: ${gyroscopeValues[1]}", fontSize = 18.sp)
+            Text(text = "Z: ${gyroscopeValues[2]}", fontSize = 18.sp)
         }
     }
 }
