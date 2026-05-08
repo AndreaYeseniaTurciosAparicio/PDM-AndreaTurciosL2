@@ -34,6 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.aytados.pantallas.AppLista
+import com.example.aytados.pantallas.Navegacion
+import com.example.aytados.pantallas.home
+import com.example.aytados.pantallas.sensores
 import com.example.aytados.ui.theme.AYTADOSTheme
 import kotlin.collections.mutableListOf
 
@@ -42,74 +46,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AppLista()
-        }
-    }
-}
-
-@Preview (showBackground = true)
-@Composable
-fun AppLista(){
-    var nombre by remember { mutableStateOf("") }
-    var lista = remember { mutableStateListOf<String>() }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(40.dp)
-
-    )
-    {
-        TextField(
-            modifier = Modifier
-                .background(Color.Magenta)
-                .align (Alignment.CenterHorizontally),
-            value = nombre,
-            onValueChange = {nombre = it},
-            label = {Text("Nombre")}
-        )
-        Button(
-            modifier = Modifier
-                .align (Alignment.CenterHorizontally),
-            onClick = {
-                if (nombre.isNotBlank()) {
-                    lista.add(nombre)
-                    nombre = ""
-                }
-            }
-        )
-        {Text("Guardar")}
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(){
-                Text("Listado de nombres y \n posicion en la lista")
-            }
-            Button(onClick = { lista.clear() }) {
-                Text("Limpiar")
-            }
-        }
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .border(3.dp, Color.Blue)
-                .padding(8.dp)
-        ) {
-            itemsIndexed(lista) { index, item ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(text = item)
-                    Text(text = "${index + 1}")
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-            }
+            Navegacion(modifier = Modifier.fillMaxSize())
         }
     }
 }
